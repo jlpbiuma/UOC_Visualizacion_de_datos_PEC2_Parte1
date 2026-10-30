@@ -50,6 +50,7 @@
       shortMonths: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
     });
 
+    const LINE_COLOR = '#b5544c';
     const parseDate = d3.utcParse('%Y-%m-%d');
     const fmtPrice = d3.format('$.2f');
     const fmtDay = d3.utcFormat('%-d %b %Y');
@@ -93,9 +94,7 @@
       const iconSize = 16;
 
       const x = d3.scaleUtc().domain(d3.extent(prices, d => d.date)).range([m.left, width - m.right]);
-      const [lo, hi] = d3.extent(prices, d => d.price);
-      const pad = Math.max((hi - lo) * 0.25, 0.25);
-      const y = d3.scaleLinear().domain([Math.max(0, lo - pad), hi + pad]).nice()
+      const y = d3.scaleLinear().domain([0, d3.max(prices, d => d.price) * 1.1]).nice()
         .range([height - m.bottom, m.top]);
 
       const svg = d3.select(container).append('svg')
@@ -119,12 +118,16 @@
         .attr('x1', m.left).attr('x2', width - m.right)
         .attr('y1', xAxisY).attr('y2', xAxisY)
         .attr('stroke', '#e2e8f0');
+      svg.append('line')
+        .attr('x1', m.left).attr('x2', m.left)
+        .attr('y1', m.top).attr('y2', xAxisY)
+        .attr('stroke', '#e2e8f0');
 
       // Línea de precio
       svg.append('path')
         .datum(prices)
         .attr('fill', 'none')
-        .attr('stroke', '#0f172a')
+        .attr('stroke', LINE_COLOR)
         .attr('stroke-width', 1.75)
         .attr('stroke-linejoin', 'round')
         .attr('d', d3.line().x(d => x(d.date)).y(d => y(d.price)).curve(d3.curveMonotoneX));
@@ -138,7 +141,7 @@
       release.append('line')
         .attr('y1', 0).attr('y2', -(r + 6))
         .attr('stroke', '#cbd5e1');
-      release.append('circle').attr('r', 2.5).attr('fill', '#0f172a');
+      release.append('circle').attr('r', 2.5).attr('fill', LINE_COLOR);
       release.append('circle')
         .attr('cy', -(r + 6 + r)).attr('r', r)
         .attr('fill', '#fff').attr('stroke', '#e2e8f0');
@@ -150,7 +153,7 @@
       // Hover: guía vertical, punto y tooltip con el precio
       const focus = svg.append('g').style('display', 'none');
       focus.append('line').attr('y1', m.top).attr('y2', xAxisY).attr('stroke', '#94a3b8');
-      focus.append('circle').attr('r', 4).attr('fill', '#0f172a').attr('stroke', '#fff').attr('stroke-width', 2);
+      focus.append('circle').attr('r', 4).attr('fill', LINE_COLOR).attr('stroke', '#fff').attr('stroke-width', 2);
 
       svg.append('rect')
         .attr('x', m.left).attr('y', m.top)
