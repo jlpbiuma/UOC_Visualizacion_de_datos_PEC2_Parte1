@@ -1,4 +1,4 @@
-"""Extrae de MTGJSON los datos de Niv-Mizzet, Parun (OTC #235) y los guarda en data/niv-mizzet.json.
+"""Extrae de MTGJSON los datos de Nicol Bolas, Dragon-God (WAR #207) y los guarda en data/card.json.
 
 MTGJSON solo publica los últimos 90 días de precios, así que el script fusiona los
 datos nuevos con los ya guardados: ejecutándolo a diario se conserva todo el histórico.
@@ -9,10 +9,10 @@ import pathlib
 import urllib.request
 
 API = "https://mtgjson.com/api/v5"
-SET_CODE = "OTC"
-NUMBER = "235"
+SET_CODE = "WAR"
+NUMBER = "207"
 YEAR = "2026"
-OUT = pathlib.Path(__file__).resolve().parent.parent / "data" / "niv-mizzet.json"
+OUT = pathlib.Path(__file__).resolve().parent.parent / "data" / "card.json"
 ICONS = OUT.parent / "icons"
 # Productos principales que se marcan en el gráfico (como en MTGGoldfish), por orden de prioridad
 # cuando varios salen el mismo día: p. ej. The Hobbit gana a The Hobbit Eternal.
@@ -20,7 +20,7 @@ SET_TYPES = ["expansion", "core", "masters", "draft_innovation"]
 
 
 def download(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "niv-mizzet-pages", "Accept": "*/*"})
+    req = urllib.request.Request(url, headers={"User-Agent": "mtg-price-pages", "Accept": "*/*"})
     with urllib.request.urlopen(req) as res:
         return res.read()
 

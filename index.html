@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Niv-Mizzet, Parun</title>
+  <title>Nicol Bolas, Dragon-God</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,13 +19,13 @@
 <body class="bg-white text-slate-900 antialiased">
   <main class="mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-16">
     <header class="mb-10">
-      <h1 id="title" class="text-3xl font-semibold tracking-tight sm:text-4xl">Niv-Mizzet, Parun</h1>
+      <h1 id="title" class="text-3xl font-semibold tracking-tight sm:text-4xl">Nicol Bolas, Dragon-God</h1>
       <p id="subtitle" class="mt-2 text-sm text-slate-500">&nbsp;</p>
     </header>
 
     <div class="grid items-start gap-10 md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
       <figure class="mx-auto w-full max-w-xs md:max-w-none">
-        <img id="card" alt="Ilustración de Niv-Mizzet, Parun"
+        <img id="card" alt="Ilustración de Nicol Bolas, Dragon-God"
              class="aspect-[488/680] w-full rounded-[4.75%] bg-slate-100 shadow-sm">
       </figure>
 
@@ -56,13 +56,16 @@
     const fmtDay = d3.utcFormat('%-d %b %Y');
     const fmtMonth = d3.utcFormat('%b');
 
-    fetch('data/niv-mizzet.json')
+    fetch('data/card.json')
       .then(r => r.json())
       .then(data => {
         const { card } = data;
         const id = card.scryfallId;
         document.getElementById('card').src =
           `https://cards.scryfall.io/large/front/${id[0]}/${id[1]}/${id}.jpg`;
+        document.title = card.name;
+        document.getElementById('title').textContent = card.name;
+        document.getElementById('card').alt = `Ilustración de ${card.name}`;
         document.getElementById('subtitle').textContent = `${card.set} · #${card.number}`;
         document.getElementById('source').textContent = data.source;
 
